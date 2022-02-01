@@ -1,5 +1,7 @@
 package com.training.example.bank;
 
+import java.lang.reflect.Array;
+
 public class Client {
     private String nom;
     private Compte[] comptes = new Compte[100];
@@ -11,6 +13,20 @@ public class Client {
 
     public String getNom() {
         return this.nom;
+    }
+
+    public Compte[] getComptes() {
+        return this.comptes;
+    }
+
+    public void virement(int compte1, int compte2, float valeur) {
+        if (this.getComptes()[compte1] != null && this.getComptes()[compte2] != null) {
+            this.getComptes()[compte1].retrait(valeur);
+            this.getComptes()[compte2].depot(valeur);
+            System.out.println("Virement ok");
+        } else {
+            System.out.println("Un des deux comptes est erronné");
+        }
     }
 
     public float getSolde() {
@@ -28,11 +44,29 @@ public class Client {
     }
 
     public void ajouterCompte() {
-        if (nbComptes < comptes.length) {
-            this.comptes[nbComptes] = new Compte();
+        if (this.nbComptes < comptes.length) {
+            this.comptes[this.nbComptes] = new Compte(this.nbComptes);
             this.nbComptes++;
+            System.out.println("Nouveau compte ajouté avec succès");
         } else {
             System.out.println("Impossible d'ajouter un nouveau compte, limite de 100 atteinte");
+        }
+    }
+
+    public void renflouer() {
+        if (this.getComptes()[0].getSolde() < 0) {
+            float aRembourser = Math.abs(this.getComptes()[0].getSolde());
+            if (this.getSolde() >= aRembourser) {
+                for (int i = 1; i < this.nbComptes; i++) {
+                    this.virement(i, 0, this.getComptes()[i].getSolde());
+                }
+                System.out.println("Compte courant renfloué");
+                this.afficherSolde();
+            } else {
+                System.out.println("Renflouement impossible");
+            }
+        } else {
+            System.out.println("Le solde du compte courant positif");
         }
     }
 

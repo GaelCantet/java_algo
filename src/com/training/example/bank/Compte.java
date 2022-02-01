@@ -2,14 +2,18 @@ package com.training.example.bank;
 
 public class Compte {
     private int numero;
-    private float solde;
+    private float solde = 0;
+
+    public Compte(int numero) {
+        this.numero = numero;
+    }
 
     public void depot(float valeur) {
-
+        this.solde += valeur;
     }
 
     public void retrait(float valeur) {
-
+        this.solde -= valeur;
     }
 
     public float getSolde() {
